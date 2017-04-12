@@ -19,7 +19,9 @@
 %%% Header ends
 
 \section{Activity Overview}
-웹은 높은 범용성과 호환성으로 많은 사람들에게 매우 익숙하지만, 보안적으로 많은 취약점을 가지고 있다. 아래 그림은 OWASP에서 발표한 웹 주요 취약점\cite{owasp}을 나타내는데 이번 activity에서는 웹 취약점 가운데 가장 순위가 높은 Injection 취약점을 이해한 후 이 취약점을 자동으로 진단하는 프로그램을 개발하고자 한다. 
+웹은 높은 범용성과 호환성으로 많은 사람들에게 매우 익숙하지만, 보안적으로 많은 취약점을 가지고 있다. 
+아래 그림은 OWASP에서 발표한 웹 주요 취약점\cite{owasp}을 나타내는데 
+이번 activity에서는 웹 취약점 가운데 가장 순위가 높은 Injection 취약점을 이해한 후 이 취약점을 자동으로 진단하는 프로그램을 개발하고자 한다. 
 
 \begin{figure}[h]
   \includegraphics[width=\linewidth]{owasptop.png}
@@ -29,9 +31,13 @@
 
 \section{Exercises}
 
+Exercise는 WebGoat\cite{webgoat}를 설치한 후 여러 유형의 Injection 취약점에 대해서 분석 및 풀이를 해보고,
+그 중 Blind Numeric SQL Injection 취약점을 자동으로 진단할 수 있는 프로그램을 개발하는 것으로 구성된다. 
+
 \begin{exercise}
 
-WebGoat\cite{webgoat}는 다양한 취약점을 가지고 있는 Web Application Server (WAS) 이다. WebGoat를 설치하고, 설치한 WAS에 접속한다. 
+WebGoat는 다양한 웹 취약점을 가지고 있는 실습용 Web Application Server (WAS)이다. 
+WebGoat를 설치하고, 설치한 WAS에 접속한다. 
 
 \begin{itemize}
   \item 실행 및 접속 방법 https://github.com/WebGoat/WebGoat/wiki/Running-WebGoat  
@@ -41,24 +47,24 @@ WebGoat\cite{webgoat}는 다양한 취약점을 가지고 있는 Web Application
 
 \begin{exercise}
 
-다음 그림과 같이 WAS의 Injection Flaws 메뉴의 하위 메뉴에 있는 문제들을 풀고, 각 문제들에 대해서 다음의 항목들로 간결하게 설명한다. 
+WebGoat의 Injection Flaws 메뉴의 하위 메뉴에 있는 문제들을 풀고, 각 문제들에 대해서 다음의 항목들로 간결하게 풀이 방법 및 결과를 리포트한다. 
 
 \begin{itemize}
-  \item 풀이 방법
+  \item 풀이 방법 (풀이 과정)
   \item 풀이 결과 (스크린샷)
 \end{itemize}
-
-\begin{figure}[h]
-  \includegraphics[height=8cm]{webgoat.png}
-  \caption{WebGoat.}
-  \label{fig:webgoat}
-\end{figure}
 
 \end{exercise}
 
 \begin{exercise}
 
-Libcurl\cite{libcurl}은 client-side에서 URL로 http 전송을 할 수 있는 라이브러리이다. 이 라이브러리를 사용하여 위에 설치한 WAS의 Injection Flaws 메뉴의 하위 메뉴 중 Blind Numeric SQL Injection을 자동으로 진단하는 프로그램을 개발한다. 
+위에서 진행한 풀이 중 Blind Numeric SQL Injection 취약점을 자동으로 진단하는 프로그램을 개발한다. 
+이 프로그램의 기본적인 원리를 간략히 설명하자면, 
+Injection이 가능한 HTML 입력 태그를 찾고, 그 태그에 true인 SQL 입력값과 false인 SQL 입력값을 각각 전송한다. 
+두 결과에 차이가 없으면 취약점이 없는 것으로 차이가 있으면 취약점이 있는 것으로 판단한다. 
+진단 프로그램 개발을 위해서 Libcurl\cite{libcurl} 라이브러리를 사용하는데
+이 라이브러리는 client-side에서 http 전송 및 간단한 HTML 파싱 기능을 제공한다. 
+본 프로그램의 요구 사항은 다음과 같다. 
 
 \begin{itemize}
   \item 실행: ./build/tester http://localhost:8081/WebGoat와 같이 arg로 url을 입력하여 해당 url의 HTML에서 사용자의 입력 및 전송이 가능한 정보를(힌트. form, input 태그) 추출한다. \cite{href} ./build/tester url1  url2  url3 ... 형태의 복수 url도 입력 가능해야 한다.  
@@ -67,9 +73,11 @@ Libcurl\cite{libcurl}은 client-side에서 URL로 http 전송을 할 수 있는 
   Blind Numeric SQL Injection Detected , URL1 \newline 
   Blind Numeric SQL Injection Detected , URL2 \newline
                      ...  
-\end{itemize}
 
-Blind Numeric SQL Injection 메뉴와 유사한 구조의 form, input 태그로 구성된 HTML에서도 취약점이 존재하는지 확인할 수 있어야 한다. 
+  \item 본 프로그램은 다른 WAS의 유사한 HTML 구조에서도 취약점이 존재하는지 확인할 수 있어야 한다. 
+  단, 본 라이브러리로 복잡한 파싱을 하기에는 적합하지 않으므로 WebGoat의 Blind Numeric SQL Injection 같이
+  ... form ... input(type=text) ... input(type=submit) ...의 구조를 따른다고 가정한다. 
+\end{itemize}
 
 \end{exercise}
 
@@ -78,13 +86,13 @@ Blind Numeric SQL Injection 메뉴와 유사한 구조의 form, input 태그로 
 위의 Exercise를 수행하고 다음과 같은 결과물을 제출한다. 
 
 \begin{itemize}
-  \item ./injection/injection.md : Exercise 2에 해당하는 설명 
+	\item ./injection/injection.md : Exercise 2에 해당하는 설명 
   \item ./injection/screenshot/ : 각 문제에 대한 풀이 결과 스크린샷 이미지 
 
-  \item ./tester : Exercise 3에 해당하는 makefile, source, 및 tester.md 파일 
-  \item ./tester/Makefile : 실행 파일은 ./build/tester로 생성 되도록 한다. 
-  \item ./tester/tester.c :  소스 코드 
-  \item ./tester/tester.md  : 진단 프로그램에 해당하는 설명 
+	\item ./tester : Exercise 3에 해당하는 makefile, source, 및 tester.md 파일 
+	\item ./tester/Makefile : 실행 파일은 ./build/tester로 생성 되도록 한다. 
+	\item ./tester/tester.c :  소스 코드 
+	\item ./tester/tester.md  : 취약점 진단 프로그램에 해당하는 설명 
 \end{itemize}
 
 \bibliography{references}
